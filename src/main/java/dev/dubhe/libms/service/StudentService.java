@@ -5,6 +5,7 @@ import dev.dubhe.libms.dao.IBookDao;
 import dev.dubhe.libms.dao.IBookListDao;
 import dev.dubhe.libms.dao.IBorrowingDao;
 import dev.dubhe.libms.dao.IStudentDao;
+import dev.dubhe.libms.mapper.BookListMapper;
 import dev.dubhe.libms.mapper.BorrowingMapper;
 import dev.dubhe.libms.mapper.StudentMapper;
 import dev.dubhe.libms.mapper.domain.Book;
@@ -29,6 +30,7 @@ public class StudentService {
     private final BorrowingMapper borrowingMapper;
     private final IBorrowingDao borrowingDao;
     private final IBookListDao bookListDao;
+    private final BookListMapper bookListMapper;
 
     public List<JSONObject> getStudents() {
         List<JSONObject> list = new ArrayList<>();
@@ -137,10 +139,16 @@ public class StudentService {
         BookList bookList = this.bookListDao.getOne(WrapperUtil.eq("sno", uid, "bno", bid));
         if (bookList != null) {
             bookList.setDel(false);
+            this.bookListDao.saveOrUpdate(bookList);
         } else {
-            bookList = new BookList(uid, bid, 0, false);
+            bookList = BookList.builder()
+                    .sno(uid)
+                    .bno(bid)
+                    .version(0)
+                    .del(false)
+                    .build();
+            this.bookListMapper.insert(bookList);
         }
-        this.bookListDao.saveOrUpdate(bookList);
         return true;
     }
 
