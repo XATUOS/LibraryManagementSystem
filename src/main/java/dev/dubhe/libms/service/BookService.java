@@ -23,7 +23,7 @@ public class BookService {
     }
 
     public boolean add(BookBody body) {
-        Book book = this.bookDao.getOne(WrapperUtil.eq("sno", body.bno));
+        Book book = this.bookDao.getOne(WrapperUtil.eq("bno", body.bno));
         if (book != null) return false;
         book = Book.create(body);
         this.bookDao.saveOrUpdate(book);
