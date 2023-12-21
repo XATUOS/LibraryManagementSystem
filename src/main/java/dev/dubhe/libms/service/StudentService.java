@@ -62,6 +62,7 @@ public class StudentService {
         return -1;
     }
 
+    @SuppressWarnings("all")
     public boolean verify(Long uid, int hash) {
         Student student = this.studentDao.getOne(WrapperUtil.eq("sno", uid));
         if (student != null) {
@@ -91,6 +92,8 @@ public class StudentService {
         Student student = this.studentDao.getOne(WrapperUtil.eq("sno", uid));
         Book book = this.bookDao.getOne(WrapperUtil.eq("bno", bid));
         if (student == null || book == null || book.getBinventory() < 1) return false;
+        if (this.borrowingDao.list(WrapperUtil.eq("sno", uid)).stream().filter((e) -> e.getReturnDate() == null).toList().size() >= 5)
+            return false;
         List<Borrowing> borrowings = this.borrowingDao.list(WrapperUtil.eq("sno", uid, "bno", bid));
         for (Borrowing borrowing : borrowings) {
             if (borrowing != null && borrowing.getReturnDate() == null) return false;
@@ -133,7 +136,8 @@ public class StudentService {
     }
 
     public boolean addBookList(Long uid, Long bid) {
-        Student student = this.studentDao.getOne(WrapperUtil.eq("sno", uid));
+        Student student;
+        student = this.studentDao.getOne(WrapperUtil.eq("sno", uid));
         Book book = this.bookDao.getOne(WrapperUtil.eq("bno", bid));
         if (student == null || book == null) return false;
         BookList bookList = this.bookListDao.getOne(WrapperUtil.eq("sno", uid, "bno", bid));
@@ -179,7 +183,7 @@ public class StudentService {
         student.setSsex(body.getSsex());
         student.setSmajor(body.getSmajor());
         student.setScollege(body.getScollege());
-        student.setSpassword(body.getSpassword());
+        if (body.getSpassword() != null) student.setSpassword(body.getSpassword());
         this.studentDao.updateById(student);
         return true;
     }

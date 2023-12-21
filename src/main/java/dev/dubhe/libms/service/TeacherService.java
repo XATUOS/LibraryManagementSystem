@@ -33,6 +33,7 @@ public class TeacherService {
         return -1;
     }
 
+    @SuppressWarnings("all")
     public boolean verify(Long uid, int hash) {
         Teacher teacher = this.teacherDao.getOne(WrapperUtil.eq("tno", uid));
         if (teacher != null) {

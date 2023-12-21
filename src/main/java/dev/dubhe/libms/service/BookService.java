@@ -3,7 +3,6 @@ package dev.dubhe.libms.service;
 import dev.dubhe.libms.dao.IBookDao;
 import dev.dubhe.libms.mapper.BookMapper;
 import dev.dubhe.libms.mapper.domain.Book;
-import dev.dubhe.libms.mapper.domain.Student;
 import dev.dubhe.libms.request.BookBody;
 import dev.dubhe.libms.utils.WrapperUtil;
 import lombok.RequiredArgsConstructor;

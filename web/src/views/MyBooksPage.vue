@@ -88,8 +88,8 @@ function removeBorrowing(book: any) {
         <el-col :span="12"/>
       </el-row>
       <el-table :data="borrowings" height="97%">
-        <el-table-column prop="bname" label="名称" width="100"/>
-        <el-table-column prop="bauthor" label="作者" width="100"/>
+        <el-table-column prop="bname" label="名称" width="200"/>
+        <el-table-column prop="bauthor" label="作者" width="120"/>
         <el-table-column prop="bversion" label="版本" width="80"/>
         <el-table-column label="借书日期" width="180">
           <template #default="{row}">
