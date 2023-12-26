@@ -1,15 +1,26 @@
 <script setup lang="ts">
 import {Request} from "@/request/Request";
-import {ref} from "vue";
+import {Ref, ref} from "vue";
 import {Operate} from "@/model/Util";
 
-const books = ref([]);
+const search = ref("");
+const books: Ref<{ bname: string }[] | any[]> = ref([]);
+const showBooks: Ref<{ bname: string }[] | any[]> = ref([]);
 refreshBooks();
 
 function refreshBooks() {
   Request.get("book/all", context => {
     books.value = context.data;
+    refreshShowBooks();
   })
+}
+
+function refreshShowBooks() {
+  showBooks.value = [];
+  for (let book of books.value) {
+    if (book.bname.includes(search.value))
+      showBooks.value.push(book);
+  }
 }
 
 function addBookList(book: any) {
@@ -35,7 +46,8 @@ function addBorrowing(book: any) {
 
 <template>
   <div>
-    <el-table :data="books">
+    <el-input v-model="search" style="width: 120px" @input="refreshShowBooks"/>
+    <el-table :data="showBooks">
       <el-table-column prop="bno" label="编号" width="60"/>
       <el-table-column prop="bname" label="名称" width="200"/>
       <el-table-column prop="bauthor" label="作者" width="200"/>
